@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -34,5 +34,20 @@
   }
   to {
     transform: rotate(360deg);
+  }
+} */
+
+body{
+  height: 100vh;
+  background-image: url('./img/fondo.jpeg');
+}
+
+/* .formulario{
+  border: 2px solid black;
+} */
+
+@media(min-width: 992px){
+  .alto-100{
+    height: 100vh;
   }
 }
