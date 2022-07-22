@@ -99,7 +99,7 @@ const Formulario = () => {
           )}
           {errors.telefono?.type === "minLength" && (
             <span className="text-danger text-small d-block mb-2">
-              Minimo 12 digitos
+              Minimo 10 digitos
             </span>
           )}
         </div>
