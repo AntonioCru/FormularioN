@@ -84,7 +84,7 @@ const Formulario = () => {
             {...register("telefono", {
               required: true,
               maxLength: 12,
-              minLength: 12,
+              minLength: 10,
             })}
           />
           {errors.telefono?.type === "required" && (
