@@ -4,21 +4,62 @@ import styles from "../styles/StylesFomulario.module.css";
 import { useForm } from "react-hook-form";
 
 const Formulario = () => {
+    const [posts, setPosts] = useState([]);
+
   const {
     register,
-    formState: { errors },
-    handleSubmit,
+    formState: { errors }, 
+    handleSubmit
   } = useForm();
+
   const [Entradas, setEntradas] = useState([]);
 
+  const tiempoTranscurrido = Date.now();
+  const hoy = new Date(tiempoTranscurrido);
+
+
   const onSubmit = (data, e) => {
-    console.log(data);
+    // console.log(data);
     setEntradas([...Entradas, data]);
     e.target.reset();
+    addPosts(Entradas);
   };
 
+  const addPosts = async (entradas)=>{
+      await fetch('http://desarrollovan-tis.dedyn.io:4030/RegisterProspect',{
+          method: 'POST',
+          body: JSON.stringify({
+              name: entradas.nombre,
+              email: entradas.email,
+              phone: entradas.telefono,
+              idState: Math.floor(Math.random()*10),
+              suburb: entradas.municipio,
+              comments: entradas.comentarios
+          }),
+              headers: {
+                'Content-type': 'application/json; charset=utf-8',
+                'Transfer-Encoding': 'chunked',
+                'Server': 'Microsoft-IIS/10.0',
+                'X-Powered-By': 'ASP.NET',
+                // 'Date': 'Fri, 29 Jul 2022 14:53:07 GMT'
+                'Date': hoy.toUTCString()
+              },
+      })
+      .then((response)=>response.json())
+      .then((data)=>{
+          setPosts((posts)=>[data, ...posts]);
+          setEntradas('');
+            // alert('Enviado');
+          console.log(data);
+      })
+      .catch((err)=>{
+          console.log(err.message);
+        //   alert('Error de envio');
+      })
+  }
+
   return (
-      <form
+      <form 
         className="col-md-12"
         id="formulario"
         onSubmit={handleSubmit(onSubmit)}
@@ -27,8 +68,9 @@ const Formulario = () => {
           <h1 className={styles.H1}>Formulario Registro</h1>
 
           <input
+        //   name= nombre''
+            // value={Entradas.nombre}
             type="text"
-            //   name="nombre"
             className="form-control"
             id="caja-nombre"
             placeholder="Nombre*"
@@ -53,6 +95,7 @@ const Formulario = () => {
           <div className="input-group">
             <div className="input-group-text">@</div>
             <input
+            // value={Entradas.email}
               type="email"
               className="form-control"
               id="caja-email"
@@ -77,6 +120,7 @@ const Formulario = () => {
 
         <div className="p-1 col-12">
           <input
+        //   value={Entradas.telefono}
             type="number"
             className="form-control"
             id="caja-telefono"
@@ -107,6 +151,7 @@ const Formulario = () => {
         <div className="p-1 col-12">
           <div>
             <select
+            // value={Entradas.comboselect}
               className="form-select"
               id="combo-estados"
               {...register("comboselect", {
@@ -157,6 +202,7 @@ const Formulario = () => {
 
         <div className="p-1 col-12">
           <input
+        //   value={Entradas.municipio}
             type="text"
             className="form-control"
             id="caja-municipio"
@@ -187,6 +233,7 @@ const Formulario = () => {
 
         <div className="p-1 col-12">
           <input
+        //   value={Entradas.colonia}
             type="text"
             className="form-control"
             id="caja-colonia"
@@ -204,6 +251,7 @@ const Formulario = () => {
 
         <div className="p-1 col-12">
           <textarea
+        //   value={Entradas.comentarios}
             className="form-control"
             id="tArea-comentarios"
             aria-label="width textarea"
@@ -230,11 +278,11 @@ const Formulario = () => {
           />
         </div>
         <ul className={styles.Ul}>
-            {
+            {/* {
                 Entradas.map(item =>
                     <li >{item.nombre} - {item.email} - {item.telefono} - {item.comboselect} - {item.municipio} - {item.colonia} - {item.comentarios}</li>
                 )
-            }
+            } */}
       </ul>
       </form>
   );
