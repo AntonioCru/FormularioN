@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "../styles/StylesFomulario.module.css";
 import { useForm } from "react-hook-form";
+import App from "../App";
 
 const Formulario = () => {
-    const [posts, setPosts] = useState([]);
+
+  const [Entradas, setEntradas] = useState([]);
 
   const {
     register,
@@ -12,51 +14,16 @@ const Formulario = () => {
     handleSubmit
   } = useForm();
 
-  const [Entradas, setEntradas] = useState([]);
-
-  const tiempoTranscurrido = Date.now();
-  const hoy = new Date(tiempoTranscurrido);
+  
 
 
   const onSubmit = (data, e) => {
-    // console.log(data);
     setEntradas([...Entradas, data]);
     e.target.reset();
-    addPosts(Entradas);
+    App(Entradas);
   };
 
-  const addPosts = async (entradas)=>{
-      await fetch('http://desarrollovan-tis.dedyn.io:4030/RegisterProspect',{
-          method: 'POST',
-          body: JSON.stringify({
-              name: entradas.nombre,
-              email: entradas.email,
-              phone: entradas.telefono,
-              idState: Math.floor(Math.random()*10),
-              suburb: entradas.municipio,
-              comments: entradas.comentarios
-          }),
-              headers: {
-                'Content-type': 'application/json; charset=utf-8',
-                'Transfer-Encoding': 'chunked',
-                'Server': 'Microsoft-IIS/10.0',
-                'X-Powered-By': 'ASP.NET',
-                // 'Date': 'Fri, 29 Jul 2022 14:53:07 GMT'
-                'Date': hoy.toUTCString()
-              },
-      })
-      .then((response)=>response.json())
-      .then((data)=>{
-          setPosts((posts)=>[data, ...posts]);
-          setEntradas('');
-            // alert('Enviado');
-          console.log(data);
-      })
-      .catch((err)=>{
-          console.log(err.message);
-        //   alert('Error de envio');
-      })
-  }
+  
 
   return (
       <form 
